@@ -6793,6 +6793,10 @@ class tgraphcanvas(FigureCanvas):
                 aw.qmc.profileDataSemaphore.release(1)
 
     @pyqtSlot(bool)
+    def pullButtonAction(self,_=False):
+        return True
+
+    @pyqtSlot(bool)
     def resetButtonAction(self,_=False):
         self.disconnectProbes() # release serial/S7/MODBUS connections
         modifiers = QApplication.keyboardModifiers()
@@ -18722,6 +18726,18 @@ class ApplicationWindow(QMainWindow):
         self.buttonRESET.setToolTip(QApplication.translate('Tooltip', 'Reset'))
         self.buttonRESET.clicked.connect(self.qmc.resetButtonAction)
 
+        #create Pull Order button
+        self.buttonPULL = QPushButton(QApplication.translate('Button', 'PULL'))
+        self.buttonPULL.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.buttonPULL.setStyleSheet(self.pushbuttonstyles['START'])
+        self.buttonPULL.setGraphicsEffect(self.makeShadow())
+        #        self.buttonRESET.pressed.connect(self.mainButtonPressed)
+        #        self.buttonRESET.released.connect(self.mainButtonReleased)
+        self.buttonPULL.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.buttonPULL.setMinimumHeight(self.standard_button_height)
+        self.buttonPULL.setToolTip(QApplication.translate('Tooltip', 'Pull'))
+        self.buttonPULL.clicked.connect(self.qmc.pullButtonAction)
+
         #create CHARGE button
         self.buttonCHARGE = AnimatedMajorEventPushButton(QApplication.translate('Button', 'CHARGE'))
         self.buttonCHARGE.setToolTip(QApplication.translate('Tooltip', 'Charge'))
@@ -19358,7 +19374,9 @@ class ApplicationWindow(QMainWindow):
         self.level1layout.addStretch()
         self.level1layout.addWidget(self.phasesLCDs)
         self.level1layout.addWidget(self.AUCLCD)
-        self.level1layout.addSpacing(20)
+        self.level1layout.addSpacing(10)
+        self.level1layout.addWidget(self.buttonPULL)
+        self.level1layout.addSpacing(10)
         self.level1layout.addWidget(self.buttonRESET)
         self.level1layout.addSpacing(10)
         self.level1layout.addWidget(self.buttonONOFF)
